@@ -84,6 +84,8 @@ GCF_016801865.2_TS_CPP_V2_rna.fna.gz     100%[==================================
 
 *Answer*: Whether all batch jobs succeeded, and how you checked that (and any problems you encountered, and how you solved them):
 
+Yes, all 22 TrimGalore batch jobs succeeded. I checked the Slurm log files with `grep -c "Successfully finished script trimgalore.sh" slurm-trimgalore-*.out`, and every log returned a count of 1. I also confirmed that there were 22 trimmed R1 FASTQ files, 22 trimmed R2 FASTQ files, and 44 FastQC HTML reports. I did not encounter any failed jobs. After confirming that the jobs had completed successfully, I moved the 22 Slurm log files into `results/trimgalore/logs/`.
+
 ------------------------------------------------------------------------
 
 ## Part C: Transcript quantification with Salmon
