@@ -3,7 +3,7 @@
 -   Author: Chandrima Das
 -   Date created: 11/07/2026
 -   Date last modified: 11/07/2026
--   This was run at the \<???\> cluster of the Ohio Supercomputer Center (<https://www.osc.edu>)
+-   This was run at the Pitzerfastq_dir=../garrigos/fastq ref_transcripts=data/ref/GCF_016801865.2_TS_CPP_V2_rna.fna.gz outdir=results cluster of the Ohio Supercomputer Center (<https://www.osc.edu>)
 -   OSC working dir: `/fs/ess/PAS3493/people/carbohydrate21/GA5`
 -   GitHub repository: \<???\>
 
@@ -26,16 +26,18 @@
 ## Set up: Download the reference transcriptome FASTA file from NCBI
 
 ``` bash
-# Downloaded on <???>
-<???>
+
+# Downloaded on 2026-11-07
+URL=https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/016/801/865/GCF_016801865.2_TS_CPP_V2/GCF_016801865.2_TS_CPP_V2_rna.fna.gz
+wget -P data/ref "$URL"
 ```
 
 ## Set up: Set file paths
 
 ``` bash
 # Inputs:
-fastq_dir=<???>
-ref_transcripts=<???>
+fastq_dir=../garrigos/fastq
+ref_transcripts=data/ref/GCF_016801865.2_TS_CPP_V2_rna.fna.gz
 
 # Base output dir:
 outdir=results

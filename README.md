@@ -50,14 +50,29 @@ Code to count the number of transcripts:
 
 ``` bash
 # Your command:
+
+#count the number of transcript
+zcat data/ref/GCF_016801865.2_TS_CPP_V2_rna.fna.gz | grep -c "^>"
 ```
 
 The output of the command was:
 
 ```         
+--2026-11-07 13:44:04--  https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/016/801/865/GCF_016801865.2_TS_CPP_V2/GCF_016801865.2_TS_CPP_V2_rna.fna.gz
+Resolving ftp.ncbi.nlm.nih.gov (ftp.ncbi.nlm.nih.gov)... 130.14.250.11, 130.14.250.12, 2607:f220:41e:250::10, ...
+Connecting to ftp.ncbi.nlm.nih.gov (ftp.ncbi.nlm.nih.gov)|130.14.250.11|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 19093150 (18M) [application/x-gzip]
+Saving to: ‘data/ref/GCF_016801865.2_TS_CPP_V2_rna.fna.gz’
+
+GCF_016801865.2_TS_CPP_V2_rna.fna.gz     100%[================================================================================>]  18.21M  96.4MB/s    in 0.2s    
+
+2026-11-07 13:44:05 (96.4 MB/s) - ‘data/ref/GCF_016801865.2_TS_CPP_V2_rna.fna.gz’ saved [19093150/19093150]
 ```
 
 *Answer*: The number of transcripts in the file:
+
+28624
 
 ------------------------------------------------------------------------
 
