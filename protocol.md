@@ -23,6 +23,16 @@
 
 -   Each script writes a Slurm log file (`slurm-<script>-<jobID>.out`) to the working dir. After the jobs of a step have finished, check these logs for errors, then move them into a `logs/` dir within that step's output dir.
 
+-   **Input data and OSC settings**
+
+    The input FASTQ files used for this assignment are the shared course dataset located at `../garrigos/fastq` within the course OSC environment. If this workflow is run in a different location, update `fastq_dir` to point to the directory containing the paired-end FASTQ files.
+
+    The Slurm scripts use the OSC project account `PAS3493`. If running the workflow under a different OSC allocation, update the `#SBATCH --account` line in each script.
+
+    After submitting each group of Slurm jobs, use:
+
+    \`\`\`bash squeue -u \$USER
+
 ## Set up: Download the reference transcriptome FASTA file from NCBI
 
 ``` bash
@@ -89,4 +99,8 @@ mv slurm-salmon_quant-*.out "$outdir"/salmon_quant/logs/
 
 ## Step 4: Summarizing the results of all steps with MultiQC
 
-\<???\>
+`sbatch scripts/multiqc.sh "$outdir" "$outdir"/multiqc`
+
+`# After the job has finished successfully:`
+
+`mv slurm-multiqc-*.out "$outdir"/multiqc/logs/`
