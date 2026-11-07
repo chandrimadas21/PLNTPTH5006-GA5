@@ -62,11 +62,30 @@ mv slurm-trimgalore-*.out "$outdir"/trimgalore/logs/
 
 ## Step 2: Creating a transcriptome index with Salmon
 
-\<???\>
+```         
+sbatch scripts/salmon_index.sh "$ref_transcripts" "$outdir"/salmon_index
+```
+
+After confirming that the job completed successfully:
+
+```         
+mv slurm-salmon_index-*.out "$outdir"/salmon_index/logs/
+```
 
 ## Step 3: Pseudo-alignment and quantification with Salmon
 
-\<???\>
+```         
+for fastq_r1 in "$outdir"/trimgalore/*_R1.fastq.gz; do
+    fastq_r2=${fastq_r1/_R1/_R2}
+    sbatch scripts/salmon_quant.sh "$fastq_r1" "$fastq_r2" "$outdir"/salmon_index "$outdir"/salmon_quant
+done
+```
+
+After confirming that all jobs completed successfully:
+
+```         
+mv slurm-salmon_quant-*.out "$outdir"/salmon_quant/logs/
+```
 
 ## Step 4: Summarizing the results of all steps with MultiQC
 
