@@ -3,7 +3,7 @@
 -   Author: Chandrima Das
 -   Date created: 11/07/2026
 -   Date last modified: 11/07/2026
--   This was run at the Pitzerfastq_dir=../garrigos/fastq ref_transcripts=data/ref/GCF_016801865.2_TS_CPP_V2_rna.fna.gz outdir=results cluster of the Ohio Supercomputer Center (<https://www.osc.edu>)
+-   This was run at the Pitzer cluster of the Ohio Supercomputer Center (<https://www.osc.edu>)
 -   OSC working dir: `/fs/ess/PAS3493/people/carbohydrate21/GA5`
 -   GitHub repository: \<???\>
 
@@ -12,26 +12,26 @@
 -   **Input files**:
 
     -   Paired-end RNA-seq reads are in `../garrigos/fastq`
+    -   If this workflow is run in a different environment, update `fastq_dir` to point to the directory containing the paired-end FASTQ files.
 
 -   **Software**:
 
     -   The scripts run programs using Apptainer containers, with links contained inside the scripts.
     -   If running at OSC, no software installations are needed.
     -   If you're not at OSC, you need to have Apptainer and Slurm installed.
+    -   The Slurm scripts use the OSC project account `PAS3493`. If running under a different OSC allocation, update the `#SBATCH --account` line in each script.
 
 -   Run all code from the working dir listed above. You don't need to create the output dirs, because the scripts will do so.
 
 -   Each script writes a Slurm log file (`slurm-<script>-<jobID>.out`) to the working dir. After the jobs of a step have finished, check these logs for errors, then move them into a `logs/` dir within that step's output dir.
 
--   **Input data and OSC settings**
+-   After submitting Slurm jobs, monitor them with:
 
-    The input FASTQ files used for this assignment are the shared course dataset located at `../garrigos/fastq` within the course OSC environment. If this workflow is run in a different location, update `fastq_dir` to point to the directory containing the paired-end FASTQ files.
+```         
+squeue -u $USER
+```
 
-    The Slurm scripts use the OSC project account `PAS3493`. If running the workflow under a different OSC allocation, update the `#SBATCH --account` line in each script.
-
-    After submitting each group of Slurm jobs, use:
-
-    \`\`\`bash squeue -u \$USER
+Wait until the jobs have finished, check the Slurm logs for successful completion, and confirm that the expected output files were produced before starting the next step.
 
 ## Set up: Download the reference transcriptome FASTA file from NCBI
 
