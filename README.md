@@ -1,20 +1,3 @@
-```{=html}
-<!--
-GA5 README template.
-- Add your answers to each question's section below.
-- For each question where we want you to add your commands,
-  put the command(s) you ran in the terminal in the corresponding ```bash code block.
-- Where we want to see a command's output, there is a plain ``` code block
-  right below the command block: paste the output there.
-- The code to run each step of the workflow goes in `protocol.md`, not here:
-  you don't need to repeat it in this file.
-- You don't need to paste the contents of your scripts into this file:
-  we will look at the scripts in your `scripts` dir directly
-  (so make sure you commit them!).
-- Delete instructional comments like this one as you go.
--->
-```
-
 # GA5 answers - Chandrima Das
 
 ------------------------------------------------------------------------
@@ -58,16 +41,7 @@ zcat data/ref/GCF_016801865.2_TS_CPP_V2_rna.fna.gz | grep -c "^>"
 The output of the command was:
 
 ```         
---2026-11-07 13:44:04--  https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/016/801/865/GCF_016801865.2_TS_CPP_V2/GCF_016801865.2_TS_CPP_V2_rna.fna.gz
-Resolving ftp.ncbi.nlm.nih.gov (ftp.ncbi.nlm.nih.gov)... 130.14.250.11, 130.14.250.12, 2607:f220:41e:250::10, ...
-Connecting to ftp.ncbi.nlm.nih.gov (ftp.ncbi.nlm.nih.gov)|130.14.250.11|:443... connected.
-HTTP request sent, awaiting response... 200 OK
-Length: 19093150 (18M) [application/x-gzip]
-Saving to: ‘data/ref/GCF_016801865.2_TS_CPP_V2_rna.fna.gz’
-
-GCF_016801865.2_TS_CPP_V2_rna.fna.gz     100%[================================================================================>]  18.21M  96.4MB/s    in 0.2s    
-
-2026-11-07 13:44:05 (96.4 MB/s) - ‘data/ref/GCF_016801865.2_TS_CPP_V2_rna.fna.gz’ saved [19093150/19093150]
+28624
 ```
 
 *Answer*: The number of transcripts in the file:
@@ -163,6 +137,8 @@ grep -i "mapping rate" results/salmon_quant/*/logs/salmon_quant.log
 The output of the command was:
 
 ```         
+results/salmon_quant/S63/logs/salmon_quant.log:mapping rate: 82.4560%
+results/salmon_quant/S64/logs/salmon_quant.log:mapping rate: 81.9152%
 results/salmon_quant/S65/logs/salmon_quant.log:mapping rate: 79.1055%
 results/salmon_quant/S66/logs/salmon_quant.log:mapping rate: 81.9350%
 results/salmon_quant/S67/logs/salmon_quant.log:mapping rate: 83.0459%
@@ -201,17 +177,33 @@ Sample S83 had the lowest Salmon mapping rate, at 76.1504%.
 
 *Answer*: For each program, the number of reports that MultiQC found, and why it found this number:
 
+MultiQC found:
+
+-   Salmon: 22 meta reports and 22 library format counts reports. There were 22 samples, and Salmon produced one quantification output and associated metadata/library-format information for each sample.
+
+-   Trim Galore: 44 reports. There were 22 paired-end samples, with one R1 and one R2 file per sample, so TrimGalore produced 44 read-level reports.
+
+-   FastQC: 44 reports. FastQC was run by TrimGalore on both the R1 and R2 trimmed reads for each of the 22 samples, giving 44 FastQC reports in total.
+
 ### 14: The General Statistics table
 
 *Answer*: The sample with the lowest Salmon mapping rate, and whether this matches your answer to question 11:
+
+Sample S83 had the lowest Salmon mapping rate in the MultiQC General Statistics table, at approximately 76.2%. This matches my answer to question 11, where the Salmon log showed a mapping rate of 76.1504% for S83.
 
 ### 15: Adapter lengths
 
 *Answer*: The most common adapter lengths, whether this surprised you, and why you think these lengths are the most common:
 
+The most common adapter lengths were very short, approximately 1-3 bp, with 1 bp being the most common. This did not surprise me after reading the MultiQC explanation. Trim Galore uses a default stringency of 1, so even a single-base overlap with the adapter can be detected and trimmed. Many of these 1-bp matches can occur randomly rather than representing substantial adapter contamination. Short 2-3 bp overlaps were also common, while longer adapter matches occurred much less frequently.
+
 ### 16: Ask Claude about the MultiQC report
 
 *Answer*: What you asked, and what you learned from Claude's answer (in your own words):
+
+I asked Claude whether the high number of very short adapter matches in the MultiQC report represented a real library-quality problem, and how I could distinguish random short matches from genuine adapter contamination. I then asked it to examine the actual Trim Galore results behind my MultiQC report.
+
+I learned that most of the apparent adapter matches were only 1-3 bp long. Because Trim Galore was run with a minimum adapter overlap of 1 bp, many of these very short matches can occur randomly and do not necessarily represent true adapter readthrough. On the other hand, longer adapter matches, where random matches are much less likely, were very rare. So, the high percentage of reads reported as having adapters in some samples does not by itself indicate poor library quality. The length distribution of the adapter matches is important for deciding whether the signal represents real contamination.
 
 ------------------------------------------------------------------------
 
@@ -221,9 +213,29 @@ Sample S83 had the lowest Salmon mapping rate, at 76.1504%.
 
 *Answer*: At least three of Claude's suggestions, and whether you agree or disagree with each one, and why:
 
+Claude reviewed my `protocol.md` and the scripts in my `scripts/` directory and suggested several ways to improve reproducibility.
+
+**Suggestion 1: Better document the location of the input FASTQ files.**\
+Claude pointed out that the protocol used `fastq_dir=../garrigos/fastq` without explaining that this path refers to the shared course dataset. I agree with this suggestion because another user would not necessarily know where these files came from or what to change if they were running the workflow somewhere else. The input data location is essential information for reproducing the analysis.
+
+**Suggestion 2: Explain that the Slurm account is specific to this OSC project.**\
+Claude noted that all of the Slurm scripts use `#SBATCH --account=PAS3493`. I agree that this should be documented. The account is correct for this assignment, but someone using a different OSC allocation would need to change it before submitting the jobs. Otherwise, the scripts might fail even though the analysis commands themselves are correct.
+
+**Suggestion 3: Make it clearer how to confirm that one Slurm step is finished before starting the next.**\
+Claude suggested documenting a way to monitor jobs, such as `squeue -u $USER`, and checking the logs and expected output files before continuing. I agree with this suggestion because later steps depend on the outputs of earlier steps. For example, Salmon quantification should not start until the Trim Galore jobs have completed successfully.
+
+**Suggestion 4: Clean up the protocol header and repository information.**\
+Claude noticed that the protocol header contained accidentally merged text and that the GitHub repository field had not yet been filled in. I agree that the header needed to be corrected because it should clearly describe the computing environment. I also agree that the final GitHub repository URL should be added once the repository is created in Part F.
+
 ### 18: Address a suggestion
 
 *Answer*: Which suggestion(s) you addressed, and what you changed:
+
+I addressed several of Claude's reproducibility suggestions in my protocol. I added an explanation that `../garrigos/fastq` is the input location used for this course and that `fastq_dir` should be changed when the workflow is run in a different environment.
+
+I also documented that the Slurm scripts use the OSC project account `PAS3493` and that this value needs to be changed if a different OSC allocation is used. In addition, I added instructions to monitor submitted jobs with `squeue -u $USER`, check the Slurm logs for successful completion, and confirm that the expected output files were produced before proceeding to the next step.
+
+Finally, I corrected the corrupted sentence in the protocol header so that it clearly states that the workflow was run on the Pitzer cluster at the Ohio Supercomputer Center. These changes were committed to Git to improve the reproducibility of the workflow.
 
 ------------------------------------------------------------------------
 
