@@ -1,5 +1,7 @@
 # GA5 answers - Chandrima Das
 
+[ DOI: 10.5072/zenodo.637421](https://handle.test.datacite.org/10.5072/zenodo.637421)
+
 ------------------------------------------------------------------------
 
 ## Part A: Your project dir, Git repo, and protocol
@@ -247,4 +249,4 @@ Finally, I corrected the corrupted sentence in the protocol header so that it cl
 
 ### 20: Get a (test) DOI with Zenodo
 
-*Answer*: Your Zenodo Sandbox DOI:
+*Answer*: Your Zenodo Sandbox DOI: [ DOI: 10.5072/zenodo.637421](https://handle.test.datacite.org/10.5072/zenodo.637421)
